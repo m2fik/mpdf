@@ -26976,6 +26976,8 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 
 		preg_match_all("/(<svg.*?<\/svg>)/si", $html, $svgi);
 		if (count($svgi[0])) {
+			// Remove SVG XML declaration from HTML (should not appear in the PDF file)
+			$html = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $html);
 			for ($i = 0; $i < count($svgi[0]); $i++) {
 				$file = $this->cache->write('/_tempSVG' . uniqid(random_int(1, 100000), true) . '_' . $i . '.svg', $svgi[0][$i]);
 				$html = str_replace($svgi[0][$i], '<img src="' . $file . '" />', $html);
